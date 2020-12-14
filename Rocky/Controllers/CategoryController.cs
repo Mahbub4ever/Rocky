@@ -22,19 +22,84 @@ namespace Rocky.Controllers
             return View(objList);
         }
 
+        //GET - CREATE
         public IActionResult Create()
         {
             return View();
         }
 
-        //GET - CREATE
+        //POST - CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category objCat)
         {
-            _db.Category.Add(objCat);
+            if(ModelState.IsValid)
+            {
+                _db.Category.Add(objCat);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(objCat);
+        }
+
+        //GET - EDIT
+        public IActionResult Edit(int? id)
+        {
+            if(id== null || id== 0)
+            {
+                return NotFound();
+            }
+            var objCatId = _db.Category.Find(id);
+            if(objCatId == null)
+            {
+                return NotFound();
+            }
+            return View(objCatId);
+        }
+
+        //POST - UPDATE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category objCat)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Category.Update(objCat);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(objCat);
+        }
+
+
+        //GET - DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var objCatId = _db.Category.Find(id);
+            if (objCatId == null)
+            {
+                return NotFound();
+            }
+            return View(objCatId);
+        }
+
+        //POST - DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var objCatId = _db.Category.Find(id);
+            if(objCatId == null)
+            {
+                return NotFound();
+            }
+            _db.Category.Remove(objCatId);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");            
         }
     }
 }
