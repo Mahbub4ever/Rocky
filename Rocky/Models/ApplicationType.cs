@@ -10,6 +10,9 @@ namespace Rocky.Models
     {
         [Key]
         public int Id { get; set; }
+        
+        [Required]
+        //[Range(1, int.MaxValue, ErrorMessage = "Name should be atleast 3 character long")]
         public string Name { get; set; }
     }
 }
